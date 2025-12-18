@@ -90,10 +90,36 @@ check_lib "uv.h" "libuv1-dev"
 check_lib "openssl/ssl.h" "libssl-dev"
 check_lib "hwloc.h" "libhwloc-dev"
 
+# Install missing dependencies if possible
 if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
-    warn "Missing dependencies: ${MISSING_DEPS[*]}"
-    warn "Attempting to continue anyway... (some dependencies might be available)"
-    log "If build fails, you'll need to install: ${MISSING_DEPS[*]}"
+    warn "Missing dependencies detected: ${MISSING_DEPS[*]}"
+
+    # Check if we can use apt (Debian/Ubuntu)
+    if command -v apt-get &> /dev/null; then
+        log "Attempting to install missing dependencies..."
+
+        # Check if running as root or can use sudo
+        if [ "$EUID" -eq 0 ]; then
+            log "Running as root, installing packages..."
+            apt-get update -qq
+            apt-get install -y ${MISSING_DEPS[*]} 2>&1 | tee -a "$LOG_FILE"
+            log "✓ Dependencies installed successfully"
+        elif command -v sudo &> /dev/null && sudo -n true 2>/dev/null; then
+            log "Using sudo to install packages..."
+            sudo apt-get update -qq
+            sudo apt-get install -y ${MISSING_DEPS[*]} 2>&1 | tee -a "$LOG_FILE"
+            log "✓ Dependencies installed successfully"
+        else
+            warn "Cannot install automatically (no root/sudo access)"
+            warn "Please install manually:"
+            echo "  apt-get install ${MISSING_DEPS[*]}"
+            log "Attempting to continue anyway..."
+        fi
+    else
+        warn "apt-get not found. Please install dependencies manually:"
+        echo "  ${MISSING_DEPS[*]}"
+        log "Attempting to continue anyway..."
+    fi
 fi
 
 # Step 3: Create installation directory
