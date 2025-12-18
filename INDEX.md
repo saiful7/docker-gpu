@@ -1,0 +1,159 @@
+# Project Index: Docker GPU Mining Setup
+
+**Project Type:** XMRig CUDA Cryptocurrency Mining Docker Solution
+**Last Indexed:** 2025-12-18
+**Location:** `/home/saiful/project/docker-gpu`
+
+---
+
+## Project Overview
+
+Complete Docker-based solution for XMRig CUDA mining on Ubuntu with automatic NVIDIA GPU setup and configuration. Supports both GPU and CPU mining with automatic fallback.
+
+---
+
+## Directory Structure
+
+```
+docker-gpu/
+├── README (1).md                  # Main project documentation
+├── INDEX.md                       # This file - project index
+├── Dockerfile                     # CUDA mining container definition
+├── install_complete_setup.sh      # System setup installer
+├── build.sh                       # Docker image builder
+├── mine.sh                        # Main mining launcher
+└── arcive/                        # Archive directory
+    └── docker-gpu.zip             # Archived project backup
+```
+
+---
+
+## File Inventory
+
+### Documentation
+| File | Lines | Purpose | Last Modified |
+|------|-------|---------|---------------|
+| `README (1).md` | 107 | Complete project documentation, usage guide, and feature list | 2025-12-18 00:40 |
+| `INDEX.md` | - | Project file catalog and quick reference (this file) | 2025-12-18 21:50 |
+
+### Docker Configuration
+| File | Lines | Purpose | Key Features |
+|------|-------|---------|--------------|
+| `Dockerfile` | 36 | CUDA mining container definition | NVIDIA CUDA 12.3, XMRig build from source, automated entrypoint |
+
+### Installation & Setup
+| File | Lines | Purpose | Requirements |
+|------|-------|---------|--------------|
+| `install_complete_setup.sh` | 43 | Complete system installer | Installs Docker, NVIDIA drivers, CUDA toolkit, container runtime |
+
+### Build & Deployment
+| File | Lines | Purpose | Dependencies |
+|------|-------|---------|--------------|
+| `build.sh` | 22 | Docker image builder | Requires NVIDIA Container Toolkit |
+| `mine.sh` | 53 | Mining launcher script | Requires built Docker image, pool URL, wallet address |
+
+### Archives
+| File | Type | Purpose |
+|------|------|---------|
+| `arcive/docker-gpu.zip` | Archive | Project backup |
+
+---
+
+## Quick Reference
+
+### Installation Sequence
+1. `install_complete_setup.sh` - System setup (requires sudo)
+2. System reboot (required for GPU access)
+3. `build.sh` - Build Docker image
+4. `mine.sh` - Start mining
+
+### Script Dependencies
+```
+install_complete_setup.sh
+    └── (system prerequisites)
+        └── build.sh
+            └── Dockerfile
+                └── mine.sh
+```
+
+### Key Components
+- **Base Image:** nvidia/cuda:12.3-devel-ubuntu22.04
+- **Mining Software:** XMRig with CUDA support
+- **Container Runtime:** Docker with NVIDIA GPU support
+- **CUDA Version:** 12.3
+- **Target OS:** Ubuntu 20.04/22.04/24.04
+
+### Environment Variables
+- `POOL_URL` - Mining pool URL (required)
+- `WALLET_ADDRESS` - Cryptocurrency wallet address (required)
+- `WORKER_NAME` - Worker identifier (optional, defaults to hostname)
+- `THREADS` - Thread count (optional, defaults to auto)
+
+### Generated Directories
+- `logs/` - Created at runtime by mine.sh for mining logs
+
+---
+
+## File Purposes (Detailed)
+
+### install_complete_setup.sh:1-43
+Complete automated installer that sets up the entire mining environment:
+- Updates system packages
+- Installs Docker Engine and CLI
+- Configures DNS for cloud VMs
+- Installs NVIDIA CUDA Toolkit
+- Installs NVIDIA Container Toolkit
+- Configures Docker runtime for GPU access
+- Adds user to docker group
+- Tests NVIDIA integration
+
+### Dockerfile:1-36
+Multi-stage Docker container definition:
+- Based on NVIDIA CUDA 12.3 development image
+- Installs build dependencies (git, cmake, SSL, hwloc)
+- Clones and compiles XMRig from source with CUDA support
+- Creates automated entrypoint script
+- Validates required environment variables
+- Configures mining parameters and logging
+
+### build.sh:1-22
+Smart Docker image builder:
+- Checks for NVIDIA Container Toolkit
+- Validates Docker runtime configuration
+- Builds xmrig-cuda-miner image
+- Provides usage instructions
+
+### mine.sh:1-53
+Enhanced mining launcher:
+- Validates input parameters (pool URL, wallet address)
+- Auto-detects GPU availability
+- Falls back to CPU mining if no GPU
+- Auto-builds Docker image if missing
+- Creates logs directory
+- Mounts log volume
+- Launches mining container with proper configuration
+
+---
+
+## File Statistics
+
+- **Total Files:** 6 source files + 1 archive
+- **Total Shell Scripts:** 3 (.sh files)
+- **Total Documentation:** 2 (.md files)
+- **Total Docker Files:** 1 (Dockerfile)
+- **Total Code Lines:** ~260 lines (excluding documentation)
+
+---
+
+## Notes
+
+- The README filename has a space: "README (1).md" - may need renaming
+- Archive directory is named "arcive" (typo?) - may need renaming to "archive"
+- Project is not currently a git repository
+- No .gitignore file present
+- No LICENSE file present
+- logs/ directory is created at runtime and not tracked
+
+---
+
+*Index generated by Claude Code*
