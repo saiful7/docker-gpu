@@ -2,7 +2,7 @@
 # Complete XMRig CUDA Mining Setup for Ubuntu
 # Usage: sudo bash install_complete_setup.sh
 
-set -e
+set -eo pipefail
 
 echo "🚀 Installing Docker + NVIDIA + XMRig Mining Setup..."
 
